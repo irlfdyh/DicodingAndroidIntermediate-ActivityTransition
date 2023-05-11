@@ -12,6 +12,7 @@ import com.dicoding.picodiploma.myrecyclerview.HeroActivity
 import com.dicoding.picodiploma.myrecyclerview.R
 import com.dicoding.picodiploma.myrecyclerview.model.Hero
 import android.app.Activity
+import android.service.voice.VoiceInteractionSession.ActivityId
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 
@@ -46,11 +47,16 @@ class ListHeroAdapter(private val listHero: ArrayList<Hero>) : RecyclerView.Adap
             tvDescription.text = hero.description
 
             itemView.setOnClickListener {
+                val optionsCompat: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        itemView.context as Activity,
+                        Pair(imgPhoto, "profile"),
+                        Pair(tvName, "name"),
+                        Pair(tvDescription, "description")
+                    )
                 val intent = Intent(itemView.context, HeroActivity::class.java)
                 intent.putExtra("Hero", hero)
-                itemView.context.startActivity(
-                    intent, ActivityOptionsCompat.makeSceneTransitionAnimation(itemView.context as Activity).toBundle()
-                )
+                itemView.context.startActivity(intent, optionsCompat.toBundle())
             }
         }
     }
